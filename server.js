@@ -60,8 +60,59 @@ app.post('/todos',function(req, res){
 
 	todoNextId++;			
 
-
 	res.json(body);
+});
+
+app.delete('/todos/:id',function(req, res){
+
+	var todoId = parseInt(req.params.id, 10);
+	
+	var todoObj = _.findWhere(todos,{id: todoId});
+
+	if(!todoObj){
+		res.status(404).json({"error":"Object not found!"});
+	}
+
+	todos = _.without(todos,todoObj);
+
+	res.status(200).send();
+
+});
+
+app.put('/todos/:id',function(req,res){
+	var todoId = parseInt(req.params.id, 10);
+	var todoObj = _.findWhere(todos,{id: todoId});
+
+	if(!todoObj){
+		res.status(404).send();
+	}
+
+	var body = req.body; 
+	todo = _.pick(body,"description","completed");
+	validAttributes = {};
+
+
+	if(todo.hasOwnProperty('completed') && _.isBoolean(todo.completed)){
+		validAttributes.completed =  todo.completed;
+
+	}else if(todo.hasOwnProperty('completed')){
+		return res.status(404).send();
+	
+	}
+
+	if(todo.hasOwnProperty('description') && _.isString(todo.description) && todo.description.trim().length > 0){
+		validAttributes.description = todo.description;
+	
+	}else if(todo.hasOwnProperty('description')){
+
+		return res.status(404).send();
+	}
+	
+	//READY TO UPDATE!
+	_.extend(todoObj,validAttributes);
+
+	res.status(200).send();
+
 });
 
 app.listen(PORT,function(){
