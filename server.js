@@ -100,11 +100,11 @@ app.delete('/todos/:id', function(req, res) {
 			res.status(404).json({
 				"error": "Object not found!"
 			});
-		}else{
+		} else {
 			res.status(204).send();
 		}
 
-		
+
 	}, function(e) {
 
 		res.status(404).send();
@@ -115,40 +115,41 @@ app.delete('/todos/:id', function(req, res) {
 
 app.put('/todos/:id', function(req, res) {
 	var todoId = parseInt(req.params.id, 10);
-
-	var todoObj = _.findWhere(todos, {
-		id: todoId
-	});
-
-	if (!todoObj) {
-		res.status(404).send();
-	}
-
 	var body = req.body;
 	todo = _.pick(body, "description", "completed");
-	validAttributes = {};
+	attributes = {};
 
 
-	if (todo.hasOwnProperty('completed') && _.isBoolean(todo.completed)) {
-		validAttributes.completed = todo.completed;
-
-	} else if (todo.hasOwnProperty('completed')) {
-		return res.status(404).send();
+	if (todo.hasOwnProperty('completed')) {
+		attributes.completed = todo.completed;
 
 	}
 
-	if (todo.hasOwnProperty('description') && _.isString(todo.description) && todo.description.trim().length > 0) {
-		validAttributes.description = todo.description;
+	if (todo.hasOwnProperty('description')) {
+		attributes.description = todo.description;
 
-	} else if (todo.hasOwnProperty('description')) {
-
-		return res.status(404).send();
 	}
 
 	//READY TO UPDATE!
-	_.extend(todoObj, validAttributes);
+	db.todo.findById(todoId).then(function(todo) {
+		if (todo) {
 
-	res.status(200).send();
+			todo.update(attributes).then(function(todo) {
+
+				res.json(todo.toJSON());
+
+			}, function(e) {
+
+				res.status(400).json(e);
+			});
+
+		} else {
+			res.status(404).send();
+		}
+	}, function() {
+		res.status(500).send();
+
+	});
 
 });
 
