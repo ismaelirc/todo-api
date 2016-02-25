@@ -83,7 +83,7 @@ app.get('/todos/:id',middleware.requireAuthentication, function(req, res) {
 
 //POST /todos
 app.post('/todos',middleware.requireAuthentication, function(req, res) {
-	var body = _.pick(req.body, 'description', 'completed');
+	var body = _.pick(req.body, 'description', 'completed','date');
 
 	db.todo.create(body).then(function(todo) {
 
@@ -131,9 +131,12 @@ app.delete('/todos/:id',middleware.requireAuthentication, function(req, res) {
 app.put('/todos/:id',middleware.requireAuthentication, function(req, res) {
 	var todoId = parseInt(req.params.id, 10);
 	var body = req.body;
-	todo = _.pick(body, "description", "completed");
+	todo = _.pick(body, "description", "completed","date");
 	attributes = {};
 
+	if(todo.hasOwnProperty('date')){
+		attributes.date = todo.date;
+	}
 
 	if (todo.hasOwnProperty('completed')) {
 		attributes.completed = todo.completed;
@@ -190,21 +193,35 @@ app.post('/users', function(req, res) {
 
 app.post('/users/login', function(req, res) {
 	var body = _.pick(req.body, 'email', 'password');
+	var userInstance;
 
 	db.user.authenticate(body).then(function(user){
 		var token = user.generateToken('autentication');
+		userInstance = user;
 
-		if(token){
-			res.header('Auth',token).json(user.toPublicJSON());
-		}else{
-			res.status(401).send();	
-		}
+		return db.token.create({
+			token: token
+		})
 
-	},function(e){
+	}).then(function(tokenInstance){
+		
+		res.header('Auth',tokenInstance.get('token')).json(userInstance.toPublicJSON());
+
+	}).catch(function(e){
 		res.status(401).send();
 
 	});
+});
 
+app.delete('/users/login',middleware.requireAuthentication, function(req, res){
+	
+	req.token.destroy().then(function(){
+		res.status(204).send();
+
+	}).catch(function(){
+
+		res.status(500).send();
+	});
 
 });
 
