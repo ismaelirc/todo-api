@@ -11,6 +11,7 @@ var PORT = process.env.PORT || 3000;
 //var todoNextId = 1;
 
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
 	res.send('Todo API Root');
@@ -226,7 +227,7 @@ app.delete('/users/login',middleware.requireAuthentication, function(req, res){
 });
 
 db.sequelize.sync({
-	force:true
+	//force:true
 }).then(function() {
 	app.listen(PORT, function() {
 		console.log('Express listening on port ' + PORT);
