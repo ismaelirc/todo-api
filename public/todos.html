@@ -55,26 +55,26 @@
 
 			<div class="row">
 	  			<div class="col-md-6">
-	  				<table class="table table-striped"> 
+	  				<table class="table table-striped" id="table-todos"> 
 	  					<thead> 
 	  						<tr>
 	  							<th>Description</th> <th>Completed</th>
 	  						</tr> 
 	  					</thead> 
 	  					<tbody> 
-	  						<td>Testing HTML</td> <td><i class="fa fa-check"></i></td>
+	  						
 	  					</tbody> 
 	  				</table>
 	  			</div>
 	  			<div class="col-md-6">
-	  				<form>
+	  				<form id="form-add-todo"> 
 						<div class="form-group">
 					    	<label for="description">To do</label>
 					    	<input type="text" class="form-control" id="description" placeholder="To do description">
 					  	</div>
 					  	<div class="checkbox">
 						    <label>
-						      <input type="checkbox"> Completed
+						      <input type="checkbox" id="completed"> Completed
 						    </label>
 					  	</div>
 					  	<button type="submit" class="btn btn-default">Save</button>
@@ -87,7 +87,8 @@
 	    <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
 	    <!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
+		
+		<script src="js/comum.js"></script>
 		<script src="js/todos.js"></script>
    
 	</body>

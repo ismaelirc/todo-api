@@ -24,8 +24,9 @@ $(document).ready(function() {
 			dataType: "json",
 			success: function(data, textStatus, request) {
 				if (data) {
+					
 					localStorage.setItem('Auth', request.getResponseHeader('Auth'));
-					//console.log(data + ' '+request.getResponseHeader('Auth'));
+					
 					window.location.href = '/todos.html';
 
 				}
