@@ -18,6 +18,8 @@
 	<!--Font Awesome [ OPTIONAL ]-->
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     	
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
     <!-- Custom styles for this template -->
     <link href="/css/todos.css" rel="stylesheet">
 
@@ -44,7 +46,7 @@
 	          </ul>
 	          <ul class="nav navbar-nav navbar-right">
 	            <li><a href="../navbar-static-top/">Account</a></li>
-	            <li><a href="./">Logout</a></li>
+	            <li><a href="#" id="logout">Logout</a></li>
 	          </ul>
 	        </div><!--/.nav-collapse -->
 	      </div>
@@ -53,11 +55,11 @@
 	    <div class="container" id="todos-list">
 
 			<div class="row">
-	  			<div class="col-md-6">
+	  			<div class="col-md-8">
 	  				<table class="table table-striped" id="table-todos"> 
 	  					<thead> 
 	  						<tr>
-	  							<th>Description</th> <th>Completed</th>
+	  							<th>Description</th>  <th>Completed</th>
 	  						</tr> 
 	  					</thead> 
 	  					<tbody> 
@@ -65,11 +67,15 @@
 	  					</tbody> 
 	  				</table>
 	  			</div>
-	  			<div class="col-md-6">
-	  				<form id="form-add-todo"> 
+	  			<div class="col-md-4">
+	  				<form action="#" id="form-add-todo"> 
 						<div class="form-group">
 					    	<label for="description">To do</label>
 					    	<input type="text" class="form-control" id="description" placeholder="To do description">
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="description">Date</label>
+					    	<input type="text" class="form-control" id="date" placeholder="Due date">
 					  	</div>
 					  	<div class="checkbox">
 						    <label>
@@ -82,11 +88,15 @@
 			</div>
 	    </div> <!-- /container -->
 
-
+		<!-- Latest compiled and minified JavaScript -->
 	    <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
-	    <!-- Latest compiled and minified JavaScript -->
+	    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	   	<script src="js/plugins/jquery-masked-input.js"></script>
+
+	    <!-- <script src="http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script> -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		
+		<!-- JavaScript Local Files -->
 		<script src="js/comum.js"></script>
 		<script src="js/todos.js"></script>
    
