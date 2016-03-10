@@ -7,8 +7,6 @@ var middleware = require('./middleware.js')(db);
 
 var app = express();
 var PORT = process.env.PORT || 3000;
-//var todos = [];
-//var todoNextId = 1;
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
@@ -17,7 +15,7 @@ app.get('/', function(req, res) {
 	res.send('Todo API Root');
 });
 
-//GET /todos
+//GET GET All Todos
 app.get('/todos',middleware.requireAuthentication, function(req, res) {
 	var query = req.query;
 	var where = {
@@ -56,7 +54,7 @@ app.get('/todos',middleware.requireAuthentication, function(req, res) {
 
 });
 
-//GET /todos/:id
+//GET One Todo
 app.get('/todos/:id',middleware.requireAuthentication, function(req, res) {
 
 	var todoId = parseInt(req.params.id, 10);
@@ -82,7 +80,7 @@ app.get('/todos/:id',middleware.requireAuthentication, function(req, res) {
 
 });
 
-//POST /todos
+//POST Create a Todo
 app.post('/todos',middleware.requireAuthentication, function(req, res) {
 	var body = _.pick(req.body, 'description', 'completed','date');
 
@@ -100,10 +98,10 @@ app.post('/todos',middleware.requireAuthentication, function(req, res) {
 
 });
 
+//DELETE one Todo
 app.delete('/todos/:id',middleware.requireAuthentication, function(req, res) {
 
 	var todoId = parseInt(req.params.id, 10);
-
 
 	db.todo.destroy({
 		where: {
@@ -129,6 +127,7 @@ app.delete('/todos/:id',middleware.requireAuthentication, function(req, res) {
 
 });
 
+//PUT Update one todo
 app.put('/todos/:id',middleware.requireAuthentication, function(req, res) {
 	var todoId = parseInt(req.params.id, 10);
 	var body = req.body;
@@ -177,8 +176,7 @@ app.put('/todos/:id',middleware.requireAuthentication, function(req, res) {
 
 });
 
-
-//post para criar novos usuários
+//POST Create New Users
 app.post('/users', function(req, res) {
 	var body = _.pick(req.body, 'email', 'password');
 
@@ -191,7 +189,7 @@ app.post('/users', function(req, res) {
 	});
 });
 
-
+//POST LOGIN
 app.post('/users/login', function(req, res) {
 	var body = _.pick(req.body, 'email', 'password');
 	var userInstance;
@@ -214,6 +212,67 @@ app.post('/users/login', function(req, res) {
 	});
 });
 
+//GET INFO USER
+app.get('/users/user',middleware.requireAuthentication ,function(req, res) {
+	var query = req.query;
+	var where = {
+		id: req.user.get('id')
+	};
+
+	db.user.findOne({
+		where: where
+	}).then(function(user) {
+		
+		res.json(user.toPublicJSON());
+
+	}, function(e) {
+
+		res.status(404).send();
+
+	});
+
+});
+
+//PUT Update Users
+app.put('/users',middleware.requireAuthentication, function(req, res) {
+	var body = req.body;
+	userUpdate = _.pick(body, "password");
+	var where = {
+		id: req.user.get('id')
+	};
+
+	attributes = {};
+
+	if(userUpdate.hasOwnProperty('password')){
+		attributes.password = userUpdate.password;
+	}
+
+	//READY TO UPDATE!
+	db.user.findOne({
+		where:where
+	}).then(function(user) {
+		if (user) {
+
+			user.update(attributes).then(function(user) {
+
+				res.json(user.toJSON());
+
+			}, function(e) {
+
+				res.status(400).json(e);
+			});
+
+		} else {
+			res.status(404).send();
+		}
+	}, function() {
+		res.status(500).send();
+
+	});
+
+});
+
+//Logout
 app.delete('/users/login',middleware.requireAuthentication, function(req, res){
 	
 	req.token.destroy().then(function(){
