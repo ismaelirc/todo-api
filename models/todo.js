@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 module.exports = function(sequelize, DataTypes){
 	return sequelize.define('todo', {
 		description: {
@@ -17,6 +19,11 @@ module.exports = function(sequelize, DataTypes){
 			allowNull: false,
 			validate:{
 				isDate:true
+			},get: function() {
+
+				var newDate = moment(this.getDataValue('date')).format('YYYY-MM-DD');
+
+				return newDate;
 			}
 		}
 	});

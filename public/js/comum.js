@@ -9,7 +9,7 @@ function tableTodoBuild(jsonTodos){
 			completed = '<i class="fa fa-check"></i>';
 		}
 
-		html += '<tr><td>'+el.description+'</td><td>'+completed+'</td></tr>';
+		html += '<tr><td>'+el.description+'</td><td>'+el.date+'</td><td>'+completed+'</td></tr>';
 	});
 
 	return html;
