@@ -3,3 +3,10 @@ body {
   padding-top: 70px;
 }
 
+tr{
+	cursor:pointer;	
+}
+
+.cancel-update{
+	display: none
+}
